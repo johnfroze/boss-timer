@@ -1,90 +1,95 @@
-// FIREBASE CONFIG
-const firebaseConfig = {
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  databaseURL: "YOUR_DATABASE_URL",
-  projectId: "YOUR_PROJECT_ID",
-};
+const SUPABASE_URL = "https://fmgmwkacearosppillyc.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtZ213a2FjZWFyb3NwcGlsbHljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NjQ3ODksImV4cCI6MjA4OTE0MDc4OX0.0biWvboYfON0kH-tesaKu2vUStbsH-r0Zahh8NYyqHY"
 
-firebase.initializeApp(firebaseConfig);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 
-const db = firebase.database();
-
-const bosses = ["scald","berserker","vulva","warlord"];
+const bosses = ["scald","berserker","vulva","warlord"]
 
 function getCooldown(){
 
-let mode = document.getElementById("mode").value;
+const mode = document.getElementById("mode").value
 
 if(mode === "normal"){
-return 8 * 3600;
+return 8 * 3600
 }
 
-return 2 * 3600;
-
-}
-
-function getPath(boss){
-
-let floor = document.getElementById("floor").value;
-let mode = document.getElementById("mode").value;
-
-return `timers/floor${floor}/${mode}/${boss}`;
+return 2 * 3600
 
 }
 
-function startTimer(boss){
+async function startTimer(boss){
 
-let cooldown = getCooldown();
-let end = Date.now() + cooldown * 1000;
+const floor = document.getElementById("floor").value
+const mode = document.getElementById("mode").value
 
-db.ref(getPath(boss)).set(end);
+const end = Date.now() + getCooldown() * 1000
+
+await supabaseClient
+.from("timers")
+.upsert({
+boss: boss,
+floor: floor,
+mode: mode,
+end_time: end
+})
 
 }
 
-function resetTimer(boss){
+async function resetTimer(boss){
 
-db.ref(getPath(boss)).remove();
+const floor = document.getElementById("floor").value
+const mode = document.getElementById("mode").value
+
+await supabaseClient
+.from("timers")
+.delete()
+.match({
+boss: boss,
+floor: floor,
+mode: mode
+})
 
 }
 
-function listenTimers(){
+async function updateTimers(){
 
-bosses.forEach(boss=>{
+const floor = document.getElementById("floor").value
+const mode = document.getElementById("mode").value
 
-db.ref(`timers`).on("value", snapshot => {
+const { data } = await supabaseClient
+.from("timers")
+.select("*")
+.eq("floor", floor)
+.eq("mode", mode)
 
-let data = snapshot.val();
+bosses.forEach(boss => {
 
-let floor = document.getElementById("floor").value;
-let mode = document.getElementById("mode").value;
+const record = data.find(t => t.boss === boss)
 
-let end = data?.[`floor${floor}`]?.[mode]?.[boss];
-
-if(!end){
-document.getElementById(boss).innerText = "READY";
-return;
+if(!record){
+document.getElementById(boss).innerText = "READY"
+return
 }
 
-let remaining = Math.floor((end - Date.now())/1000);
+let remaining = Math.floor((record.end_time - Date.now()) / 1000)
 
 if(remaining <= 0){
-document.getElementById(boss).innerText = "READY";
+
+document.getElementById(boss).innerText = "READY"
+
 }else{
 
-let h=Math.floor(remaining/3600);
-let m=Math.floor((remaining%3600)/60);
-let s=remaining%60;
+let h = Math.floor(remaining/3600)
+let m = Math.floor((remaining%3600)/60)
+let s = remaining%60
 
 document.getElementById(boss).innerText =
-`${h.toString().padStart(2,"0")}:${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+`${h.toString().padStart(2,"0")}:${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`
 
 }
 
-});
-
-});
+})
 
 }
 
-setInterval(listenTimers,1000);
+setInterval(updateTimers,1000)
