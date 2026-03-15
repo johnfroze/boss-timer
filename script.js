@@ -1,54 +1,68 @@
-let bosses = ["scald","berserker","vulva","warlord"];
+// Firebase config
+const firebaseConfig = {
+
+apiKey: "YOUR_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+databaseURL: "YOUR_DATABASE_URL",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_BUCKET",
+messagingSenderId: "XXXX",
+appId: "XXXX"
+
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const bosses=["scald","berserker","vulva","warlord"];
 
 function getCooldown(){
 
-let mode = document.getElementById("mode").value;
+let mode=document.getElementById("mode").value;
 
-if(mode === "normal"){
-return 8 * 3600;
+if(mode==="normal"){
+return 8*3600;
 }
 
-return 2 * 3600;
+return 2*3600;
 
 }
 
-function getKey(boss){
+function getPath(boss){
 
-let floor = document.getElementById("floor").value;
-let mode = document.getElementById("mode").value;
+let floor=document.getElementById("floor").value;
+let mode=document.getElementById("mode").value;
 
-return `${floor}_${mode}_${boss}`;
+return `timers/floor${floor}/${mode}/${boss}`;
 
 }
 
 function startTimer(boss){
 
-let cooldown = getCooldown();
-let end = Date.now() + cooldown*1000;
+let cooldown=getCooldown();
+let end=Date.now()+cooldown*1000;
 
-let key = getKey(boss);
-
-localStorage.setItem(key,end);
+db.ref(getPath(boss)).set(end);
 
 }
 
 function resetTimer(boss){
 
-let key = getKey(boss);
-
-localStorage.removeItem(key);
+db.ref(getPath(boss)).remove();
 
 }
 
 function updateTimers(){
 
-let now = Date.now();
+let now=Date.now();
 
 bosses.forEach(boss=>{
 
-let key = getKey(boss);
+let path=getPath(boss);
 
-let end = localStorage.getItem(key);
+db.ref(path).on("value",snap=>{
+
+let end=snap.val();
 
 if(!end){
 
@@ -57,19 +71,13 @@ return;
 
 }
 
-let remaining = Math.floor((end-now)/1000);
+let remaining=Math.floor((end-now)/1000);
 
 if(remaining<=0){
 
 document.getElementById(boss).innerText="READY";
 
-localStorage.removeItem(key);
-
-notifyBoss(boss);
-
-return;
-
-}
+}else{
 
 let h=Math.floor(remaining/3600);
 let m=Math.floor((remaining%3600)/60);
@@ -78,22 +86,12 @@ let s=remaining%60;
 document.getElementById(boss).innerText=
 `${h.toString().padStart(2,"0")}:${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
 
+}
+
 });
 
-}
+});
 
-function notifyBoss(boss){
-
-if(Notification.permission==="granted"){
-
-new Notification(`${boss} has respawned!`);
-
-}
-
-}
-
-if(Notification.permission!=="granted"){
-Notification.requestPermission();
 }
 
 setInterval(updateTimers,1000);
