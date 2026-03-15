@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boss Timer</title>
 <link rel="stylesheet" href="style.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+
 </head>
 
 <body>
 
-<div class="container">
-
-<h1 class="title">Boss Floor</h1>
+<h1>Boss Timer Panel</h1>
 
 <div class="selectors">
 
@@ -19,6 +20,8 @@
 <option value="1">Floor 1</option>
 <option value="2">Floor 2</option>
 <option value="3">Floor 3</option>
+<option value="4">Floor 4</option>
+<option value="5">Floor 5</option>
 </select>
 
 <select id="mode">
@@ -34,34 +37,33 @@
 <h2>Scald</h2>
 <div class="timer" id="scald">READY</div>
 <button onclick="startTimer('scald')">Start</button>
-<button onclick="resetTimer('scald')" class="reset">Reset</button>
+<button onclick="resetTimer('scald')">Reset</button>
 </div>
 
 <div class="boss">
 <h2>Berserker</h2>
 <div class="timer" id="berserker">READY</div>
 <button onclick="startTimer('berserker')">Start</button>
-<button onclick="resetTimer('berserker')" class="reset">Reset</button>
+<button onclick="resetTimer('berserker')">Reset</button>
 </div>
 
 <div class="boss">
 <h2>Vulva</h2>
 <div class="timer" id="vulva">READY</div>
 <button onclick="startTimer('vulva')">Start</button>
-<button onclick="resetTimer('vulva')" class="reset">Reset</button>
+<button onclick="resetTimer('vulva')">Reset</button>
 </div>
 
 <div class="boss">
 <h2>Warlord</h2>
 <div class="timer" id="warlord">READY</div>
 <button onclick="startTimer('warlord')">Start</button>
-<button onclick="resetTimer('warlord')" class="reset">Reset</button>
-</div>
-
+<button onclick="resetTimer('warlord')">Reset</button>
 </div>
 
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>
