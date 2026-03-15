@@ -13,11 +13,20 @@
 
 <h1 class="title">Boss Floor</h1>
 
+<div class="selectors">
+
 <select id="floor">
-<option>Floor 1</option>
-<option>Floor 2</option>
-<option>Floor 3</option>
+<option value="1">Floor 1</option>
+<option value="2">Floor 2</option>
+<option value="3">Floor 3</option>
 </select>
+
+<select id="mode">
+<option value="interserver">Interserver (2h)</option>
+<option value="normal">Normal (8h)</option>
+</select>
+
+</div>
 
 <div class="boss-grid">
 
@@ -25,24 +34,28 @@
 <h2>Scald</h2>
 <div class="timer" id="scald">READY</div>
 <button onclick="startTimer('scald')">Start</button>
+<button onclick="resetTimer('scald')" class="reset">Reset</button>
 </div>
 
 <div class="boss">
 <h2>Berserker</h2>
 <div class="timer" id="berserker">READY</div>
 <button onclick="startTimer('berserker')">Start</button>
+<button onclick="resetTimer('berserker')" class="reset">Reset</button>
 </div>
 
 <div class="boss">
 <h2>Vulva</h2>
 <div class="timer" id="vulva">READY</div>
 <button onclick="startTimer('vulva')">Start</button>
+<button onclick="resetTimer('vulva')" class="reset">Reset</button>
 </div>
 
 <div class="boss">
 <h2>Warlord</h2>
 <div class="timer" id="warlord">READY</div>
 <button onclick="startTimer('warlord')">Start</button>
+<button onclick="resetTimer('warlord')" class="reset">Reset</button>
 </div>
 
 </div>
