@@ -1,14 +1,42 @@
-const cooldown = 7200;
+let bosses = ["scald","berserker","vulva","warlord"];
 
-let timers = {};
+function getCooldown(){
+
+let mode = document.getElementById("mode").value;
+
+if(mode === "normal"){
+return 8 * 3600;
+}
+
+return 2 * 3600;
+
+}
+
+function getKey(boss){
+
+let floor = document.getElementById("floor").value;
+let mode = document.getElementById("mode").value;
+
+return `${floor}_${mode}_${boss}`;
+
+}
 
 function startTimer(boss){
 
-let end = Date.now() + cooldown * 1000;
+let cooldown = getCooldown();
+let end = Date.now() + cooldown*1000;
 
-timers[boss] = end;
+let key = getKey(boss);
 
-localStorage.setItem(boss,end);
+localStorage.setItem(key,end);
+
+}
+
+function resetTimer(boss){
+
+let key = getKey(boss);
+
+localStorage.removeItem(key);
 
 }
 
@@ -16,13 +44,17 @@ function updateTimers(){
 
 let now = Date.now();
 
-["scald","berserker","vulva","warlord"].forEach(boss=>{
+bosses.forEach(boss=>{
 
-let end = timers[boss] || localStorage.getItem(boss);
+let key = getKey(boss);
+
+let end = localStorage.getItem(key);
 
 if(!end){
+
 document.getElementById(boss).innerText="READY";
 return;
+
 }
 
 let remaining = Math.floor((end-now)/1000);
@@ -31,11 +63,9 @@ if(remaining<=0){
 
 document.getElementById(boss).innerText="READY";
 
+localStorage.removeItem(key);
+
 notifyBoss(boss);
-
-localStorage.removeItem(boss);
-
-timers[boss]=null;
 
 return;
 
@@ -67,3 +97,6 @@ Notification.requestPermission();
 }
 
 setInterval(updateTimers,1000);
+
+document.getElementById("floor").addEventListener("change",updateTimers);
+document.getElementById("mode").addEventListener("change",updateTimers);
