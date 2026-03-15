@@ -1,5 +1,7 @@
 const SUPABASE_URL="https://fmgmwkacearosppillyc.supabase.co"
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtZ213a2FjZWFyb3NwcGlsbHljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NjQ3ODksImV4cCI6MjA4OTE0MDc4OX0.0biWvboYfON0kH-tesaKu2vUStbsH-r0Zahh8NYyqHY"
+const WEBHOOK="https://discord.com/api/webhooks/1482770887886503947/VEpm8ajXgiGM1C24UsGC2BkQswsgnFLb3f4V5dtw0QGCJZwEXgn6LLwTG9TBqQ7y6Zo-"
+
 
 const supabaseClient = supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
 
