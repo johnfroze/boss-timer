@@ -5,13 +5,13 @@
 <title>Boss Timer</title>
 <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 </head>
 
 <body>
 
-<h1>Boss Timer Panel</h1>
+<h1>Guild Boss Timer</h1>
 
 <div class="selectors">
 
@@ -28,6 +28,8 @@
 <option value="normal">Normal (8h)</option>
 </select>
 
+<input id="player" placeholder="Your name">
+
 </div>
 
 <div class="boss-grid">
@@ -35,6 +37,8 @@
 <div class="boss">
 <h2>Scald</h2>
 <div id="scald">READY</div>
+<div class="bar"><div id="scald_bar"></div></div>
+<div id="scald_by"></div>
 <button onclick="startTimer('scald')">Start</button>
 <button onclick="resetTimer('scald')">Reset</button>
 </div>
@@ -42,6 +46,8 @@
 <div class="boss">
 <h2>Berserker</h2>
 <div id="berserker">READY</div>
+<div class="bar"><div id="berserker_bar"></div></div>
+<div id="berserker_by"></div>
 <button onclick="startTimer('berserker')">Start</button>
 <button onclick="resetTimer('berserker')">Reset</button>
 </div>
@@ -49,6 +55,8 @@
 <div class="boss">
 <h2>Vulva</h2>
 <div id="vulva">READY</div>
+<div class="bar"><div id="vulva_bar"></div></div>
+<div id="vulva_by"></div>
 <button onclick="startTimer('vulva')">Start</button>
 <button onclick="resetTimer('vulva')">Reset</button>
 </div>
@@ -56,6 +64,8 @@
 <div class="boss">
 <h2>Warlord</h2>
 <div id="warlord">READY</div>
+<div class="bar"><div id="warlord_bar"></div></div>
+<div id="warlord_by"></div>
 <button onclick="startTimer('warlord')">Start</button>
 <button onclick="resetTimer('warlord')">Reset</button>
 </div>
